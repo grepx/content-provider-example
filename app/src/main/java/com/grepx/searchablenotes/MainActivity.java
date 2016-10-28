@@ -1,13 +1,21 @@
 package com.grepx.searchablenotes;
 
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
       }
     });
+
+    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    recyclerView.setAdapter(new SearchAdapter());
   }
 
   @Override
@@ -48,5 +60,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private class SearchAdapter extends RecyclerView.Adapter<NoteHolder> {
+
+    @Override
+    public NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+      final View view = inflater.inflate(R.layout.note, parent, false);
+      return new NoteHolder(view);
+    }
+
+    @Override public void onBindViewHolder(NoteHolder holder, int position) {
+      holder.bind("id" + position, "note " + position);
+    }
+
+    @Override public int getItemCount() {
+      return 5;
+    }
+  }
+
+  private class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    private String id;
+    final private TextView textView;
+
+    public NoteHolder(View view) {
+      super(view);
+      textView = (TextView) view.findViewById(R.id.note_text);
+      view.setOnClickListener(this);
+    }
+
+    public void bind(String id, String text) {
+      textView.setText(text);
+    }
+
+    @Override
+    public void onClick(View v) {
+    }
   }
 }
