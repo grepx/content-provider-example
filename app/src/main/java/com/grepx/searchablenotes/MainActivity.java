@@ -1,10 +1,15 @@
 package com.grepx.searchablenotes;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +19,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.grepx.searchablenotes.data.NotesPersistenceContract;
+import com.grepx.searchablenotes.util.CursorRecyclerViewAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements LoaderManager.LoaderCallbacks<Cursor> {
+
+  private RecyclerView recyclerView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,26 +46,22 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    recyclerView.setAdapter(new SearchAdapter());
+
+    getSupportLoaderManager().initLoader(1, null, this);
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
       return true;
     }
@@ -62,27 +69,48 @@ public class MainActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  private class SearchAdapter extends RecyclerView.Adapter<NoteHolder> {
+  @Override public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    return new CursorLoader(
+        getApplicationContext(),
+        NotesPersistenceContract.NoteEntry.buildNotesUri(),
+        NotesPersistenceContract.NoteEntry.NOTES_COLUMNS, null, null, null
+    );
+  }
+
+  @Override public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    recyclerView.setAdapter(new SearchAdapter(this, cursor));
+  }
+
+  @Override public void onLoaderReset(Loader<Cursor> loader) {
+  }
+
+  private class SearchAdapter extends CursorRecyclerViewAdapter<NoteHolder> {
+
+    public SearchAdapter(Context context, Cursor cursor) {
+      super(context, cursor);
+    }
 
     @Override
     public NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-      final View view = inflater.inflate(R.layout.note, parent, false);
+      View view = inflater.inflate(R.layout.note, parent, false);
       return new NoteHolder(view);
     }
 
-    @Override public void onBindViewHolder(NoteHolder holder, int position) {
-      holder.bind("id" + position, "note " + position);
-    }
+    @Override public void onBindViewHolder(NoteHolder viewHolder, Cursor cursor) {
+      int index = cursor.getColumnIndex(NotesPersistenceContract.NoteEntry.COLUMN_NAME_BODY);
+      int id = cursor.getInt(index);
 
-    @Override public int getItemCount() {
-      return 5;
+      index = cursor.getColumnIndex(NotesPersistenceContract.NoteEntry.COLUMN_NAME_BODY);
+      String body = cursor.getString(index);
+
+      viewHolder.bind(id, body);
     }
   }
 
   private class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private String id;
+    private int id;
     final private TextView textView;
 
     public NoteHolder(View view) {
@@ -91,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
       view.setOnClickListener(this);
     }
 
-    public void bind(String id, String text) {
-      textView.setText(text);
+    public void bind(int id, String body) {
+      this.id = id;
+      textView.setText(body);
     }
 
     @Override
