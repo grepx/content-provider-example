@@ -3,8 +3,6 @@ package com.grepx.searchablenotes;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
@@ -19,8 +17,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.grepx.searchablenotes.data.NotesPersistenceContract;
 import com.grepx.searchablenotes.util.CursorRecyclerViewAdapter;
@@ -98,30 +94,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override public void onBindViewHolder(NoteHolder viewHolder, Cursor cursor) {
-      int index = cursor.getColumnIndex(NotesPersistenceContract.NoteEntry.COLUMN_NAME_BODY);
+      int index = cursor.getColumnIndex(NotesPersistenceContract.NoteEntry._ID);
       int id = cursor.getInt(index);
+
+      index = cursor.getColumnIndex(NotesPersistenceContract.NoteEntry.COLUMN_NAME_TITLE);
+      String title = cursor.getString(index);
 
       index = cursor.getColumnIndex(NotesPersistenceContract.NoteEntry.COLUMN_NAME_BODY);
       String body = cursor.getString(index);
 
-      viewHolder.bind(id, body);
+      viewHolder.bind(id, title, body);
     }
   }
 
   private class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private int id;
-    final private TextView textView;
+    final private TextView title;
+    final private TextView body;
 
     public NoteHolder(View view) {
       super(view);
-      textView = (TextView) view.findViewById(R.id.note_text);
+      title = (TextView) view.findViewById(R.id.note_title);
+      body = (TextView) view.findViewById(R.id.note_body);
       view.setOnClickListener(this);
     }
 
-    public void bind(int id, String body) {
+    public void bind(int id, String title, String body) {
       this.id = id;
-      textView.setText(body);
+      this.title.setText(title);
+      this.body.setText(body);
     }
 
     @Override
