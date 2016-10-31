@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class NotesPersistenceContract {
-  public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID;
+  public static final String CONTENT_AUTHORITY = "com.grepx.searchablenotespro.notedata";
 
   public static final String CONTENT_NOTE_LIST_TYPE =
       "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + NoteEntry.TABLE_NAME;
