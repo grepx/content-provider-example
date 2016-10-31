@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
   @Override public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     return new CursorLoader(
         getApplicationContext(),
-        new NotesPersistenceContract("com.grepx.searchablenotes.notedata").buildNotesUri(),
+        new NotesPersistenceContract("com.grepx.searchablenotespro.notedata").buildNotesUri(),
         NotesPersistenceContract.NoteEntry.NOTES_COLUMNS, null, null, null
     );
   }
