@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/SearchableNotes.iml" filepath="$PROJECT_DIR$/SearchableNotes.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/notedata/notedata.iml" filepath="$PROJECT_DIR$/notedata/notedata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/searchablenotespro/searchablenotespro.iml" filepath="$PROJECT_DIR$/searchablenotespro/searchablenotespro.iml" />
     </modules>
   </component>
 </project>

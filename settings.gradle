@@ -1,1 +1,1 @@
-include ':app', ':notedata'
+include ':app', ':notedata', ':searchablenotespro'
