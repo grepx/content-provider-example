@@ -13,12 +13,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.grepx.searchablenotes.data.NotesPersistenceContract;
+import com.grepx.notedata.NotesPersistenceContract;
 import com.grepx.searchablenotes.util.CursorRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity

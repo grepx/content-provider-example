@@ -1,9 +1,8 @@
-package com.grepx.searchablenotes.data;
+package com.grepx.notedata;
 
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import com.grepx.searchablenotes.BuildConfig;
 
 public class NotesPersistenceContract {
   public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID;

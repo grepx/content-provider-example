@@ -1,4 +1,4 @@
-package com.grepx.searchablenotes.data;
+package com.grepx.notedata;
 
 public class SampleData {
   public static String sampleNoteTitle1 = "Saturn V";

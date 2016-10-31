@@ -1,4 +1,4 @@
-package com.grepx.searchablenotes.data;
+package com.grepx.notedata;
 
 import android.content.ContentValues;
 import android.content.Context;
